@@ -1,30 +1,37 @@
-variable "instance_name" {
-  type = "string"
-}
-
-variable "machine_type" {
-  description = "specified image id for instance"
-  default = "ec2-micro-1"
+variable "project_id" {
+  description = "project id in which we will create all instance"
+  type = string
 }
 
 variable "region" {
   description = "gcp region for specified instance"
-  default = "us-west1-b"
+  default = "us-east1"
 }
 
-variable "project" {
-  description = "project name in which we will create all instance"
-  default = "project-name"
+variable "zone" {
+  description = "gcp region for specified instance"
+  default = "us-east1-c"
 }
 
-variable "image_name" {
-  description = "image type for given instance"
-  default = "ubuntu-1604-xenial-v20190411"
+variable "instance_name" {
+  type = string
+  default = "test"
 }
 
-variable "image_family" {
-  description = "image family for given instance"
-  default = "ubuntu-os-cloud"
+variable "old_instance" {
+  type = string
+  default = "test"
+}
+
+variable "instance_type" {
+  description = "specified image id for instance"
+  default = "f1-micro"
+}
+
+variable "image" {
+  description = "The image from which to initialize the boot disk"
+  type        = string
+  default     = "debian-cloud/debian-11"
 }
 
 variable "network" {
@@ -32,16 +39,16 @@ variable "network" {
   default = "default"
 }
 
-variable "credential" {
-  description = "credential file path different for different users"
-  default = "keyfile.json"
-}
+# variable "credential" {
+#   description = "credential file path different for different users"
+#   default = "keyfile.json"
+# }
 
-variable "tags" {
-  type = "list"
-  description = "tags is used for defining the rule of a instance"
-}
+# variable "tags" {
+#   type = "list"
+#   description = "tags is used for defining the rule of a instance"
+# }
 
-variable "service_account" {
-  default = "service.account@gmail.com"
-}
+# variable "service_account" {
+#   default = "service.account@gmail.com"
+# }
