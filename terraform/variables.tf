@@ -5,27 +5,24 @@ variable "project_id" {
 
 variable "region" {
   description = "gcp region for specified instance"
+  type = string
   default = "us-east1"
 }
 
 variable "zone" {
   description = "gcp region for specified instance"
+  type = string
   default = "us-east1-c"
 }
 
-variable "instance_name" {
-  type = string
-  default = "test"
-}
-
-variable "old_instance" {
-  type = string
-  default = "test"
-}
-
 variable "instance_type" {
-  description = "specified image id for instance"
-  default = "f1-micro"
+  type = string
+  default = "e2-small"
+}
+
+variable "instance_count" {
+  type        = number
+  default     = 3
 }
 
 variable "image" {

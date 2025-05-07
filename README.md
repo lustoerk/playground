@@ -1,18 +1,19 @@
 # Phase 1 - K3s, Google Cloud, Terraform, K8s
 Goals: 
-- setup minimal self-managed k8s cluster on k8s via tf
-- setup k3s cluster locally
-- deploy microservice application to both
-- have multiple environments
-- use services such as helm, terraform workspaces, github actions
-- compare self-managed services to GCP services
-- setup basic monitoring
+- Setup minimal self-managed k3s cluster on GCP via Terraform
+- Setup k3s cluster locally
+- Deploy microservice application to both
+- Have multiple environments, e.g. dev, staging, prod
+- Use services such as helm, terraform workspaces, github actions
+- Compare self-managed services to GCP services
+- Setup basic monitoring
+- Check out service mesh
 
 ## Step 1 - connect via command line and create simple resource
-- [install gcloud cli](https://cloud.google.com/sdk/docs/install)
-`gcloud config list`
-`gcloud auth login`
-`gcloud auth configure-docker`
+- [install gcloud cli](https://cloud.google.com/sdk/docs/install)  
+`gcloud config list`   
+`gcloud auth login`  
+`gcloud auth configure-docker`  
 
 ```
 gcloud compute instances create test-1
@@ -27,6 +28,9 @@ gcloud compute instances create test-1
 see /terraform
 
 ## Step 3 - research minimal k8s setup on gcp and create via tf
+- 3 ec2-small nodes, 1 master, 2 worker
+- using k3s
+
 
 ## Step 4 - deploy microservice to k8s
 
@@ -35,9 +39,24 @@ see /terraform
 # Phase 2 - AWS
 
 
+# Todo
+- Evaluate different programmatic authentication methods for TF->GCP
+- Replace ADC with credentials
+
+# Nice to have
+- Use "Secure Tokens" with Google Secrets Manager, to manage k3s tokens for the workers
+- decide on setting "type" explictly or implictly, reducing redundance
+- evaluate which values to store as variables
+- evaluate, if i need subnets
+
 # Journal
+## Wed, 7. May
+- compare K8s alternatives like k0s, k3s, kind, minikube
+- compare helm and kustomize
+- created nodes for k3s, but no ssh access
+
 ## Tue, 6. May
 - GCloud setup easy
 - creating resource easy
 - templated tf code via earthly
-- need to import cli-created resource ...
+- need to import cli-created resource ... can't resolve `Error: Cannot determine zone: set in this resource, or set provider-level zone.`, skipping this issue for now and removing manually

@@ -1,14 +1,8 @@
-resource "google_compute_instance" "default" {
-  name         = var.instance_name
+resource "google_compute_instance" "k3s_master" {
+  name         = "k3s-master"
   machine_type = var.instance_type
-  # tags         = var.tags
   zone         = var.zone
-  allow_stopping_for_update = true
-
-  labels = {
-    environment = "dev"
-    #role = "mongodb"
-  }
+  tags         = ["k3s-node"]
 
   boot_disk {
     initialize_params {
@@ -17,22 +11,33 @@ resource "google_compute_instance" "default" {
   }
 
   network_interface {
-    network = var.network
+    network    = google_compute_network.vpc_network.id
+    subnetwork = google_compute_subnetwork.subnetwork.id
 
     access_config {
-      // Ephemeral public IP
-      # nat_ip = "${google_compute_address.static.address}"
+      // This configures external IPs for SSH use
+    }
+  }
+}
+
+resource "google_compute_instance" "k3s_worker" {
+  count        = 2
+  name         = "k3s-worker-${count.index}"
+  machine_type = var.instance_type
+  zone         = var.zone
+
+  boot_disk {
+    initialize_params {
+      image = var.image
     }
   }
 
-  # service_account {
-  #   email = "${var.service_account}"
-  #   scopes = ["cloud-platform"]
-  # }
+  network_interface {
+    network    = google_compute_network.vpc_network.id
+    subnetwork = google_compute_subnetwork.subnetwork.id
 
-  # metadata_startup_script  = "${file("./start.sh")}"
-}
-
-output "IP" {
-  value = google_compute_instance.default.network_interface.0.access_config.0.nat_ip
+    access_config {
+      // This configures external IPs for SSH use
+    }
+  }
 }
