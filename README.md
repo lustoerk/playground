@@ -48,8 +48,17 @@ see /terraform
 - decide on setting "type" explictly or implictly, reducing redundance
 - evaluate which values to store as variables
 - evaluate, if i need subnets
+- setup google OS login for centralized access management via roles and iam permsissions
 
 # Journal
+## Thu, 8. May 
+- deploy ssh key: ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_k3s
+- use it with terraform
+- i am assigning dns records to my instances, so i dont have to update my hosts.ini everytime 
+i restart them. This is just shifting the issue: i need to run terraform now every time
+after restarting, to update the records, which will then also take some time to propagate.
+I could have a cloud function to do this dynamically.
+
 ## Wed, 7. May
 - compare K8s alternatives like k0s, k3s, kind, minikube
 - compare helm and kustomize
