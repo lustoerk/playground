@@ -32,7 +32,7 @@
         dest: /tmp/node-token
       when: k3s_check.rc != 0
 
-    - name: Ensure k3s is installed and join cluster
+    - name: Install K3s on workers and join cluster
       shell: |
         curl -sfL https://get.k3s.io | K3S_URL=https://{{ hostvars[groups['master'][0]].inventory_hostname }}:6443 K3S_TOKEN=$(cat /tmp/node-token) sh -
       when: k3s_check.rc != 0

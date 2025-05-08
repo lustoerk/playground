@@ -11,10 +11,11 @@ Goals:
 
 ## Step 1 - connect via command line and create simple resource
 - [install gcloud cli](https://cloud.google.com/sdk/docs/install)  
-`gcloud config list`   
-`gcloud auth login`  
-`gcloud auth configure-docker`  
+- `gcloud config list`   
+- `gcloud auth login`  
+- `gcloud auth configure-docker`  
 
+Create an instance
 ```
 gcloud compute instances create test-1
     --machine-type=f1-micro 
@@ -24,8 +25,8 @@ gcloud compute instances create test-1
 
 ## Step 2 - create test resources via tf
 
-`gcloud auth application-default login`
-see /terraform
+- `gcloud auth application-default login`  
+- see /terraform  
 
 ## Step 3 - research minimal k8s setup on gcp and create via tf
 - 3 ec2-small nodes, 1 master, 2 worker

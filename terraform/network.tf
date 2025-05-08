@@ -20,3 +20,14 @@ resource "google_compute_firewall" "ssh-rule" {
   source_ranges = ["0.0.0.0/0"]
 }
 
+resource "google_compute_firewall" "k3s-rule" {
+  name = "k3s"
+  network = google_compute_network.vpc_network.name
+  allow {
+    protocol = "tcp"
+    ports = ["6443"]
+  }
+  target_tags = ["k3s-node"]
+  source_ranges = ["0.0.0.0/0"]
+}
+
