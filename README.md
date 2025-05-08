@@ -58,6 +58,9 @@ see /terraform
 i restart them. This is just shifting the issue: i need to run terraform now every time
 after restarting, to update the records, which will then also take some time to propagate.
 I could have a cloud function to do this dynamically.
+- `ansible-playbook -i hosts.ini install_k3s.yml `
+- ***NameError:NameError("name 'hostvars' is not defined")
+    - 
 
 ## Wed, 7. May
 - compare K8s alternatives like k0s, k3s, kind, minikube

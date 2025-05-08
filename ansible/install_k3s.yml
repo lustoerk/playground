@@ -1,27 +1,39 @@
 ---
 - hosts: master
   become: yes
+  debugger: on_failed
   tasks:
-    - name: Ensure k3s is installed on the master
+    - name: Check if K3s is installed
+      command: which k3s
+      register: k3s_check
+      ignore_errors: true
+    
+    - name: Install K3s on master
       shell: |
         curl -sfL https://get.k3s.io | sh -
+      when: k3s_check.rc != 0
 
     - name: Retrieve node token
       shell: cat /var/lib/rancher/k3s/server/node-token
       register: node_token
 
-    - name: Install K3s master
-      shell: |
-        curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-ip={{ ansible_host }}" sh -
-
 - hosts: workers
   become: yes
+  debugger: on_failed
   tasks:
+    - name: Check if K3s is installed
+      command: which k3s
+      register: k3s_check
+      ignore_errors: true
+
     - name: Copy node token from master
       copy:
-        content: "{{ hostvars['master'].node_token.stdout }}"
+        content: "{{ hostvars[groups['master'][0]].node_token.stdout }}"
         dest: /tmp/node-token
+      when: k3s_check.rc != 0
 
     - name: Ensure k3s is installed and join cluster
       shell: |
-        curl -sfL https://get.k3s.io | K3S_URL=https://{{ hostvars['master'].ansible_host }}:6443 K3S_TOKEN=$(cat /tmp/node-token) sh -
+        curl -sfL https://get.k3s.io | K3S_URL=https://{{ hostvars[groups['master'][0]].inventory_hostname }}:6443 K3S_TOKEN=$(cat /tmp/node-token) sh -
+      when: k3s_check.rc != 0
+

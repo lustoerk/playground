@@ -29,6 +29,7 @@ resource "google_compute_instance" "k3s_worker" {
   name         = "k3s-worker-${count.index}"
   machine_type = var.instance_type
   zone         = var.zone
+  tags         = ["k3s-node"]
 
   boot_disk {
     initialize_params {
