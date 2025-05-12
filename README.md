@@ -1,3 +1,11 @@
+# Requirements
+- [install gcloud cli](https://cloud.google.com/sdk/docs/install)  
+- `gcloud auth login`  
+- `gcloud auth application-default login`  
+- `gcloud init`  
+- `ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_k3s`
+- `cd terraform && terraform init`  
+
 # Phase 1 - K3s, Google Cloud, Terraform, K8s
 Goals: 
 - Setup minimal self-managed k3s cluster on GCP via Terraform
@@ -52,8 +60,12 @@ gcloud compute instances create test-1
 - setup google OS login for centralized access management via roles and iam permsissions
 
 # Journal
+## Mo, 12. May
+- Add GCS bucket to manage terraform state file remotely
+- chicen-egg issue: create bucket with local backend, then migrate backend. How do i resolve this now on a different machine?
+
 ## Thu, 8. May 
-- deploy ssh key: ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_k3s
+- deploy ssh key: `ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_k3s`
 - use it with terraform
 - i am assigning dns records to my instances, so i dont have to update my hosts.ini everytime 
 i restart them. This is just shifting the issue: i need to run terraform now every time
@@ -61,7 +73,8 @@ after restarting, to update the records, which will then also take some time to 
 I could have a cloud function to do this dynamically.
 - `ansible-playbook -i hosts.ini install_k3s.yml `
 - ***NameError:NameError("name 'hostvars' is not defined")
-    - 
+    - this was a matter of correctly referencing variables within hostvars
+- switching machines creates the need for a remote state file
 
 ## Wed, 7. May
 - compare K8s alternatives like k0s, k3s, kind, minikube
