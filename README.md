@@ -1,20 +1,52 @@
+# Overview
+
+This documentation outlines the steps taken to set up a minimal self-managed K3s cluster on Google Cloud Platform (GCP) using Terraform and Ansible. It includes requirements, setup procedures, and notes on troubleshooting and future considerations.
+
+# Versions
+
+    K3s: v1.32.4+k3s1
+    Terraform: v1.11.3
+    Ansible: 2.18.3, Jinja: 3.1.6
+    Python: 3.13.2
+
+
 # Requirements
 - [install gcloud cli](https://cloud.google.com/sdk/docs/install)  
-- `gcloud auth login`  
-- `gcloud auth application-default login`  
-- `gcloud init`  
-- `ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_k3s`
+- Authenticate with GCP:
+```
+gcloud auth login
+gcloud auth application-default login`  
+gcloud init
+````
 
-## Terraform setup
-- brew install terraform
-- create GCS Bucket to store state file
-    - 23f48053572b634d-terraform-remote-backend
-    - public access denied, local to europe-west10 (berlin) and versioned for allowing state locking
-- `cd terraform && terraform init && terraform apply`  
-- `cd ../ansible && ansible-playbook -i hosts.ini --install_k3s.yml`
+-  Generate SSH Key: 
+```
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_k3s
+```
 
+# Terraform Setup
+1. __Install Terraform__:  
+```
+brew install terraform
+```
+
+2. __Create a GCS Bucket for State Management__
+- Bucket Name: __23f48053572b634d-terraform-remote-backend__
+- Ensure public access is denied, the bucket is located in europe-west10 (Berlin), and versioning is enabled for state locking.
+
+3. __Initialize and Apply Terraform Configuration__
+```
+cd terraform
+terraform init
+terraform apply
+```
+4. __Deploy K3s using Ansible__
+```
+cd ../ansible
+ansible-playbook -i hosts.ini install_k3s.yml
+```
 # Phase 1 - K3s, Google Cloud, Terraform, K8s
-Goals: 
+## Goals
 - Setup minimal self-managed k3s cluster on GCP via Terraform
 - Setup k3s cluster locally
 - Deploy microservice application to both
@@ -25,12 +57,15 @@ Goals:
 - Check out service mesh
 
 ## Step 1 - connect via command line and create simple resource
-- [install gcloud cli](https://cloud.google.com/sdk/docs/install)  
-- `gcloud config list`   
-- `gcloud auth login`  
-- `gcloud auth configure-docker`  
+1. [Install gcloud CLI](https://cloud.google.com/sdk/docs/install)  
+2. Configure GCloud SDK
+```
+gcloud config list
+gcloud auth login
+gcloud auth configure-docker
+```
 
-Create an instance
+3. Create a compute instance
 ```
 gcloud compute instances create test-1
     --machine-type=f1-micro 
@@ -38,14 +73,23 @@ gcloud compute instances create test-1
     --image-project=debian-cloud
 ```
 
-## Step 2 - create test resources via tf
+## Step 2: Create test resources via tf
+- Authenticate for application default credentials  
+```
+gcloud auth application-default login
+```
+- Run Terraform  
+```
+cd terraform && terraform plan && terraform apply -auto-approve
+```
 
-- `gcloud auth application-default login`  
-- see /terraform  
+## Step 3: research minimal k8s setup on gcp and create via tf
+- Utilize three e2-small instances: one master and two worker nodes  
+- Deploy K3s using Ansible:
+    - K3s will be installed to `/usr/local/bin/k3s`
+    - Uninstall script located at `/usr/local/bin/k3s-agent-uninstall.sh`
+    - Ensure the service runs as `k3s-agent.service`
 
-## Step 3 - research minimal k8s setup on gcp and create via tf
-- 3 ec2-small nodes, 1 master, 2 worker
-- deploy k3s using ansible
 
 
 ## Step 4 - deploy microservice to k8s
@@ -53,7 +97,7 @@ gcloud compute instances create test-1
 ## Step 5 - diversive setup, create staging and prod in cloud, dev on local k3s cluster
 
 # Phase 2 - AWS
-
+_Details for AWS integration can be added here as needed._
 
 # Todo
 - Evaluate different programmatic authentication methods for TF->GCP
@@ -64,11 +108,11 @@ gcloud compute instances create test-1
 - evaluate, if i need subnets
 - setup google OS login for centralized access management via roles and iam permsissions
 
-# Debt
+# Known Issues and Technical Debt
 - Disabled host-key-checking with ansible, so new hosts don't create a fingerprint missmatch error. It should rather be updated when new hosts are created instead of ignored.
 
 # Journal  
-## Tue, 13. May  
+## May 13
 - Trying to deploy k3s manually, then with k3sup
 - Error deploying agent to nodes:  
     E0513 07:32:39.189784  116409 memcache.go:265]  
@@ -91,11 +135,11 @@ gcloud compute instances create test-1
 - Redeploying results in an ansible error, due to the host key being old
 
 
-## Mo, 12. May
+## May 12
 - Add GCS bucket to manage terraform state file remotely
 - chicen-egg issue: create bucket with local backend, then migrate backend. How do i resolve this now on a different machine? Is this debt__?__
 
-## Thu, 8. May 
+## May 8
 - deploy ssh key: `ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_k3s`
 - use it with terraform
 - i am assigning dns records to my instances, so i dont have to update my hosts.ini everytime 
@@ -107,12 +151,12 @@ I could have a cloud function to do this dynamically.
     - this was a matter of correctly referencing variables within hostvars
 - switching machines creates the need for a remote state file
 
-## Wed, 7. May
+## May 7
 - compare K8s alternatives like k0s, k3s, kind, minikube
 - compare helm and kustomize
 - created nodes for k3s, but no ssh access
 
-## Tue, 6. May
+## May 6
 - GCloud setup easy
 - creating resource easy
 - templated tf code via earthly
