@@ -58,19 +58,18 @@ gcloud compute instances create test-1
 # Todo
 - Evaluate different programmatic authentication methods for TF->GCP
 - Replace ADC with credentials
-
-# Nice to have
 - Use "Secure Tokens" with Google Secrets Manager, to manage k3s tokens for the workers
 - decide on setting "type" explictly or implictly, reducing redundance
 - evaluate which values to store as variables
 - evaluate, if i need subnets
 - setup google OS login for centralized access management via roles and iam permsissions
 
-
 # Debt
+- Disabled host-key-checking with ansible, so new hosts don't create a fingerprint missmatch error. It should rather be updated when new hosts are created instead of ignored.
 
 # Journal  
 ## Tue, 13. May  
+- Trying to deploy k3s manually, then with k3sup
 - Error deploying agent to nodes:  
     E0513 07:32:39.189784  116409 memcache.go:265]  
         "Unhandled Error" err="couldn't get current server API group list:   
