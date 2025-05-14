@@ -3,6 +3,7 @@ tmp
 # Ansible
 ansible/hosts.ini
 ansible/sa_key.json
+ansible/ansible-controller-sa-key.json
 
 # Terraform
 # Local .terraform directories

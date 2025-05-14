@@ -90,10 +90,7 @@ cd terraform && terraform plan && terraform apply -auto-approve
     - K3s will be installed to `/usr/local/bin/k3s`
     - Uninstall script located at `/usr/local/bin/k3s-agent-uninstall.sh`
     - Ensure the service runs as `k3s-agent.service`
-- resolve ssh key issue by using OS Login
-    - `gcloud compute project-info add-metadata --metadata enable-oslogin=TRUE`
-    - [create SA for Ansible](https://alex.dzyoba.com/blog/gcp-ansible-service-account/)
-    - `gcloud iam service-accounts create ansible-sa --display-name "Service account for Ansible"`
+- [resolve ssh key issue by using OS Login](https://alex.dzyoba.com/blog/gcp-ansible-service-account/)
 
 
 
@@ -117,6 +114,13 @@ _Details for AWS integration can be added here as needed._
 - Disabled host-key-checking with ansible, so new hosts don't create a fingerprint missmatch error. It should rather be updated when new hosts are created instead of ignored
 
 # Journal  
+## May 14  
+- Use Service Account for Ansible
+    - 
+- added oslogin to main.tf
+    - had to import it, because it was created manually before: `terraform import google_compute_project_metadata_item.enable_os_login enable-oslogin`
+- hosts.ini is still not created properly, master is set to `null`, although ip is correctly printed as output
+
 ## May 13
 - Trying to deploy k3s manually, then with k3sup
 - Error deploying agent to nodes:  

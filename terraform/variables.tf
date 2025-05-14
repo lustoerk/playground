@@ -16,6 +16,16 @@ variable "zone" {
   default = "europe-west10-a"
 }
 
+variable "admin_user_email" {
+  description = "Admin User Email"
+  type = string
+}
+
+variable "bucket" {
+  description = "Bucket"
+  type = string
+}
+
 # INSTANCES
 variable "instance_type" {
   type = string
@@ -57,8 +67,6 @@ variable "domain" {
   type = string
   default = "stoerk.tech"
 }
-
-
 
 # variable "credential" {
 #   description = "credential file path different for different users"
