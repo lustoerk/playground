@@ -8,6 +8,7 @@ This documentation outlines the steps taken to set up a minimal self-managed K3s
     Terraform: v1.11.3
     Ansible: 2.18.3, Jinja: 3.1.6
     Python: 3.13.2
+    Google Cloud SDK 464.0.0
 
 
 # Requirements
@@ -89,6 +90,10 @@ cd terraform && terraform plan && terraform apply -auto-approve
     - K3s will be installed to `/usr/local/bin/k3s`
     - Uninstall script located at `/usr/local/bin/k3s-agent-uninstall.sh`
     - Ensure the service runs as `k3s-agent.service`
+- resolve ssh key issue by using OS Login
+    - `gcloud compute project-info add-metadata --metadata enable-oslogin=TRUE`
+    - [create SA for Ansible](https://alex.dzyoba.com/blog/gcp-ansible-service-account/)
+    - `gcloud iam service-accounts create ansible-sa --display-name "Service account for Ansible"`
 
 
 
@@ -109,7 +114,7 @@ _Details for AWS integration can be added here as needed._
 - setup google OS login for centralized access management via roles and iam permsissions
 
 # Known Issues and Technical Debt
-- Disabled host-key-checking with ansible, so new hosts don't create a fingerprint missmatch error. It should rather be updated when new hosts are created instead of ignored.
+- Disabled host-key-checking with ansible, so new hosts don't create a fingerprint missmatch error. It should rather be updated when new hosts are created instead of ignored
 
 # Journal  
 ## May 13
@@ -129,6 +134,7 @@ _Details for AWS integration can be added here as needed._
     - did not destroy it via terraform, but manually, now it needs to be removed from state file:
         - `terraform state list` > `terraform state rm <resource>`
 - tf will randomly create a `print y` loop, when giving the yes input to accept an apply
+    -> this is the command /usr/bin/yes that will loop y if no other input is given
 - Error running command '../update_hosts.sh': exit status 5. Output: jq: error (at <stdin>:1): Cannot iterate over
 │ null (null)  
     - when creating resources from zero, this will happen. A second apply will run succesfully. Is this debt__?__

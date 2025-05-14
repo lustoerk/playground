@@ -20,7 +20,7 @@ resource "google_compute_instance" "k3s_master" {
   }
 
   metadata = {
-    ssh-keys = "${var.ssh_user}:${file(var.ssh_public_key_path)}"
+    // ssh-keys = "${var.ssh_user}:${file(var.ssh_public_key_path)}"
   }
 }
 
@@ -47,7 +47,7 @@ resource "google_compute_instance" "k3s_worker" {
   }
 
   metadata = {
-    ssh-keys = "${var.ssh_user}:${file(var.ssh_public_key_path)}"
+    // ssh-keys = "${var.ssh_user}:${file(var.ssh_public_key_path)}"
   }
 }
 
