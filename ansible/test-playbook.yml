@@ -1,0 +1,25 @@
+---
+- name: Test OS Login with Ansible SA
+  hosts: all # Or target specific groups/hosts, e.g., zone_us_central1_a
+  gather_facts: true
+
+  tasks:
+    - name: Ping all hosts
+      ansible.builtin.ping:
+
+    - name: Who am I on the remote host?
+      ansible.builtin.command: whoami
+      register: whoami_result
+
+    - name: Print whoami
+      ansible.builtin.debug:
+        var: whoami_result.stdout
+
+    - name: Test sudo (if SA has osAdminLogin)
+      ansible.builtin.command: sudo whoami
+      register: sudo_whoami_result
+      become: false # We are testing direct sudo command, not Ansible's become
+
+    - name: Print sudo whoami
+      ansible.builtin.debug:
+        var: sudo_whoami_result.stdout

@@ -1,0 +1,21 @@
+---
+plugin: google.cloud.gcp_compute
+projects:
+  - secure-guru-451416-j9 # Replace with your project ID
+auth_kind: serviceaccount
+service_account_file: ansible-controller-sa-key.json # Adjust path
+keyed_groups:
+  - key: labels
+    prefix: label
+  - key: zone
+    prefix: zone
+hostnames:
+  - name # Use the GCE instance name as the Ansible inventory hostname
+compose:
+  # This is crucial: tell Ansible to SSH as the service account
+  ansible_user: "ansible-controller-2635ddfc@secure-guru-451416-j9.iam.gserviceaccount.com" # Replace with the actual email from terraform output
+  # e.g. ansible_user: "'ansible-controller-xxxx@your-project-id.iam.gserviceaccount.com'"
+
+# Optional: If you need to use a specific gcloud profile for SSH (usually not needed if key is correct)
+#vars:
+#  ansible_ssh_common_args: "-o CloudSDK_Account={{ ansible_controller_sa_email_output_from_terraform }}"

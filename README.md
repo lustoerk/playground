@@ -102,6 +102,9 @@ cd terraform && terraform plan && terraform apply -auto-approve
 _Details for AWS integration can be added here as needed._
 
 # Todo
+- https://towardsaws.com/top-5-terraform-projects-for-aws-to-boost-your-resume-easy-intermediate-expert-levels-with-59c5cc67c3e0
+- https://github.com/aws-samples/terraform-sample-workshop/tree/main
+- [Try multi repo example](https://github.com/alfonsof/terraform-aws-examples/blob/master/code/10-multi-repo-example)]
 - Evaluate different programmatic authentication methods for TF->GCP
 - Replace ADC with credentials
 - Use "Secure Tokens" with Google Secrets Manager, to manage k3s tokens for the workers
@@ -114,6 +117,13 @@ _Details for AWS integration can be added here as needed._
 - Disabled host-key-checking with ansible, so new hosts don't create a fingerprint missmatch error. It should rather be updated when new hosts are created instead of ignored
 
 # Journal  
+## May 16
+- gcp is running out. starting the switch to aws and using terragrunt to manage both clouds
+- setup aws cli for sso login: activate identity center, create user, group and assign account access
+- setup ssh
+- install k3s
+- install k9s
+
 ## May 14  
 - Use Service Account for Ansible
     - 
